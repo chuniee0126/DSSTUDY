@@ -1,26 +1,58 @@
 #include <stdio.h>
-#include <malloc.h>
+#include <math.h>
+
+
+int RecursiveSearch(int arr[], int size, int target)
+{
+
+	if (size == 0)
+		return -1;
+	else if (size > 0 && arr[size - 1] == target)
+		return size - 1;
+	else
+		return RecursiveSearch(arr, size - 1, target);
+
+}
 
 int main(void)
 {
+	int arr[10] = { 0, 10, 20, 30, 40, 50, 60, 70, 80, 90 };
 	int size = 10;
-	int *ptr = NULL;
-	int i = 0;
+	int target = 0, result = 0;
+	int i = 0, j = 0, temp;
 
-	ptr = (int *)malloc(sizeof(int) * size);
-	for (i = 0; i < 100; i = i + 10) {
-		*(ptr + i / 10) = i;
-	}
+	srand(time(NULL));
 
-	printf("ptr = %p, ptr + 3 = %p, &ptr[3] = %p \n", ptr, ptr + 3, &ptr[3]);
+	printf("array = ");
 
 	for (i = 0; i < size; i++) {
-		printf(" %d ", ptr[i]);
+		j = rand() % 10;
+		temp = arr[i];
+		arr[i] = arr[j];
+		arr[j] = temp;
+	}
+
+	for (i = 0; i < size; i++) {
+		printf("%d ", arr[i]);
 	}
 
 	printf("\n");
 
-	free(ptr);
+	while (1) {
+		printf("input integer : ");
+
+		scanf("%d", &target);
+
+		printf("searching %d...result = ", target);
+
+		result = RecursiveSearch(arr, size, target);
+
+		printf("%d \n", result);
+
+		if (result == -1)
+			break;
+		
+	}
 
 	return 0;
 }
