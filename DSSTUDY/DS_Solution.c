@@ -1,58 +1,52 @@
 #include <stdio.h>
-#include <math.h>
+#include <malloc.h>
 
+#define MAX_SIZE 256
 
-int RecursiveSearch(int arr[], int size, int target)
+typedef struct
 {
+	int month, date, hour, min;
+	char title[256];
 
-	if (size == 0)
-		return -1;
-	else if (size > 0 && arr[size - 1] == target)
-		return size - 1;
-	else
-		return RecursiveSearch(arr, size - 1, target);
+}Plan;
 
+void buffer(void) {
+	while (getchar() != '\n');
 }
+
 
 int main(void)
 {
-	int arr[10] = { 0, 10, 20, 30, 40, 50, 60, 70, 80, 90 };
-	int size = 10;
-	int target = 0, result = 0;
-	int i = 0, j = 0, temp;
+	int repeat = 0, i = 0;
+	Plan * pnt;
 
-	srand(time(NULL));
+	printf("# of schedules: ");
+	scanf("%d", &repeat);
 
-	printf("array = ");
+	pnt = (Plan *)malloc(sizeof(Plan) * repeat);
 
-	for (i = 0; i < size; i++) {
-		j = rand() % 10;
-		temp = arr[i];
-		arr[i] = arr[j];
-		arr[j] = temp;
+	buffer();
+
+	for (i = 0; i < repeat; i++) {
+		printf("%d-th schedule: \n", i);
+		printf("	date (month date): ");
+		scanf("%d %d", &pnt[i].month, &pnt[i].date);
+		printf("	time (hour min): ");
+		scanf("%d %d", &pnt[i].hour, &pnt[i].min);
+		buffer();
+		printf("	title: ");
+		fgets(pnt[i].title, MAX_SIZE, stdin);
+		/*scanf 로 가능한 방법*/
+		//scanf("%[^\n]s", pnt[i].title);
 	}
 
-	for (i = 0; i < size; i++) {
-		printf("%d ", arr[i]);
+	printf("=== %d schedules ===\n", i);
+
+	for (i = 0; i < repeat; i++) {
+		printf("%d %d, %d:%d, %s \n", pnt[i].month, pnt[i].date, pnt[i].hour, pnt[i].min, pnt[i].title);
 	}
 
-	printf("\n");
-
-	while (1) {
-		printf("input integer : ");
-
-		scanf("%d", &target);
-
-		printf("searching %d...result = ", target);
-
-		result = RecursiveSearch(arr, size, target);
-
-		printf("%d \n", result);
-
-		if (result == -1)
-			break;
-		
-	}
+	free(pnt);
 
 	return 0;
 }
