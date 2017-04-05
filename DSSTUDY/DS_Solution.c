@@ -37,7 +37,10 @@ void PushLeft(Dequeue *d, int item)
 		exit(0);
 	}*/
 
-	d->left = --d->left % d->max_size;
+	if (d->left != 0)
+		d->left = --d->left % (d->max_size + 1);
+	else
+		d->left = d->max_size;
 
 	d->dequeue[d->left] = item;
 
@@ -63,7 +66,7 @@ void PushRight(Dequeue *d, int item)
 		exit(0);
 	}*/
 
-	d->right = ++d->right % d->max_size;
+	d->right = ++d->right % (d->max_size + 1);
 
 	return;
 
@@ -88,7 +91,7 @@ int PopLeft(Dequeue *d)
 		exit(0);
 	}*/
 
-	d->left = ++d->left % d->max_size;
+	d->left = ++d->left % (d->max_size + 1);
 
 	return temp;
 }
@@ -108,7 +111,10 @@ int PopRight(Dequeue *d)
 		exit(0);
 	}*/
 
-	d->right = --d->right % d->max_size;
+	if (d->right != 0)
+		d->right = --d->right % (d->max_size + 1);
+	else
+		d->right = d->max_size;
 
 	return d->dequeue[d->right];
 }
@@ -123,7 +129,7 @@ int IsFullDequeue(Dequeue *d)		// if d is full, return 1, otherwise, 0
 			return 1;
 	}*/
 
-	if ((d->right+1) % d->max_size == d->left)
+	if ((d->right+1) % (d->max_size + 1) == d->left)
 		return 1;
 	
 	return 0;
@@ -175,26 +181,4 @@ void DisplayDequeue(Dequeue *d)		// display current content of d, provided
 }
 
 
-int main(void) {
-	Dequeue *d = CreateDequeue(10);
 
-	printf("PushRight(10)\n");
-	PushRight(d, 10);
-
-	for (int i = 0; i < 11; i++)
-		PushRight(d, 10);
-
-	DisplayDequeue(d);
-
-	printf("PopLeft() returns %d\n", PopLeft(d));
-
-	DisplayDequeue(d);
-
-	DestroyDequeue(d);
-
-	printf("Bye!\n");
-
-	system("PAUSE");
-
-	return 0;
-}
