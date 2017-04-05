@@ -6,13 +6,13 @@
 // The definition of the following functions should be in "Dequeue.c"
 Dequeue *CreateDequeue(int max_size)
 {
-	Dequeue * d;
-	d->right = 0;
-	d->left = max_size - 1;
-	d->max_size = max_size;
-	d->dequeue = (int*)malloc(sizeof(int)*max_size);
+	Dequeue * temp = (Dequeue*)malloc(sizeof(Dequeue));
+	temp->right = -1;
+	temp->left = max_size;
+	temp->max_size = max_size;
+	temp->dequeue = (int*)malloc(sizeof(int)*max_size);
 
-	return d;
+	return temp;
 }
 void DestroyDequeue(Dequeue *d)
 {
@@ -27,6 +27,22 @@ void PushLeft(Dequeue *d, int item)
 		printf("Dequeue is full!\n");
 		return;
 	}
+	
+	if (d->left == d->max_size)
+		d->left--;
+
+	d->dequeue[d->left] = item;
+
+	if (d->left > 0 && d->left <= (d->max_size - 1))
+		d->left--;
+	else if (d->left == 0)
+		d->left = d->max_size - 1;
+	else {
+		printf("Error!");
+		exit(0);
+	}
+
+	return;
 
 
 }
@@ -37,6 +53,21 @@ void PushRight(Dequeue *d, int item)
 		return;
 	}
 
+	if (d->right == -1)
+		d->right++;
+
+	d->dequeue[d->right] = item;
+	
+	if (d->right >= 0 && d->right < (d->max_size - 1))
+		d->right++;
+	else if (d->right == (d->max_size - 1))
+		d->right = 0;
+	else {
+		printf("Error!");
+		exit(0);
+	}
+
+	return;
 
 }
 int PopLeft(Dequeue *d)
@@ -46,7 +77,16 @@ int PopLeft(Dequeue *d)
 		return;
 	}
 
+	if (d->left >= 0 && d->left < (d->max_size - 1))
+		d->left++;
+	else if (d->left == (d->max_size - 1))
+		d->left = 0;
+	/*else {
+		printf("Error!");
+		exit(0);
+	}*/
 
+	return d->dequeue[d->left];
 }
 int PopRight(Dequeue *d)
 {
@@ -55,15 +95,42 @@ int PopRight(Dequeue *d)
 		return;
 	}
 
+	if (d->right > 0 && d->right <= (d->max_size - 1))
+		d->right--;
+	else if (d->right == 0)
+		d->right = (d->max_size - 1);
+	/*else {
+		printf("Error!");
+		exit(0);
+	}*/
 
+	return d->dequeue[d->right];
 }
 int IsFullDequeue(Dequeue *d)		// if d is full, return 1, otherwise, 0
 {
-
+	if (d->right != (d->max_size - 1)) {
+		if (d->right + 1 == d->left)
+			return 1;
+	}
+	else if (d->right == (d->max_size - 1)) {
+		if (d->left == 0)
+			return 1;
+	}
+	
+	return 0;
 }
 int IsEmptyDequeue(Dequeue *d)		// if d is empty, return 1, otherwise, 0
 {
+	if (d->right != 0) {
+		if (d->right - 1 == d->left)
+			return 1;
+	}
+	else if (d->right == 0) {
+		if (d->left == (d->max_size - 1))
+			return 1;
+	}
 
+	return 0;
 }
 void DisplayDequeue(Dequeue *d)		// display current content of d, provided
 {
@@ -98,4 +165,26 @@ void DisplayDequeue(Dequeue *d)		// display current content of d, provided
 	}
 
 	printf("\n");
+}
+
+
+int main(void) {
+	Dequeue *d = CreateDequeue(10);
+
+	printf("PushRight(10)\n");
+	PushRight(d, 10);
+
+	DisplayDequeue(d);
+
+	printf("PopLeft() returns %d\n", PopLeft(d));
+
+	DisplayDequeue(d);
+
+	DestroyDequeue(d);
+
+	printf("Bye!\n");
+
+	system("PAUSE");
+
+	return 0;
 }
