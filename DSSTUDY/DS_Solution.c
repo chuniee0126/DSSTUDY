@@ -10,7 +10,7 @@ Dequeue *CreateDequeue(int max_size)
 	temp->right = 0;
 	temp->left = 0;
 	temp->max_size = max_size;
-	temp->dequeue = (int*)malloc(sizeof(int)*(max_size+1));
+	temp->dequeue = (int*)malloc(sizeof(int)*(max_size));
 
 	return temp;
 }
@@ -38,9 +38,9 @@ void PushLeft(Dequeue *d, int item)
 	}*/
 
 	if (d->left != 0)
-		d->left = --d->left % (d->max_size + 1);
+		d->left = --d->left % (d->max_size);
 	else
-		d->left = d->max_size;
+		d->left = d->max_size-1;
 
 	d->dequeue[d->left] = item;
 
@@ -66,7 +66,7 @@ void PushRight(Dequeue *d, int item)
 		exit(0);
 	}*/
 
-	d->right = ++d->right % (d->max_size + 1);
+	d->right = ++d->right % (d->max_size);
 
 	return;
 
@@ -91,7 +91,7 @@ int PopLeft(Dequeue *d)
 		exit(0);
 	}*/
 
-	d->left = ++d->left % (d->max_size + 1);
+	d->left = ++d->left % (d->max_size);
 
 	return temp;
 }
@@ -112,9 +112,9 @@ int PopRight(Dequeue *d)
 	}*/
 
 	if (d->right != 0)
-		d->right = --d->right % (d->max_size + 1);
+		d->right = --d->right % (d->max_size);
 	else
-		d->right = d->max_size;
+		d->right = d->max_size-1;
 
 	return d->dequeue[d->right];
 }
@@ -129,7 +129,7 @@ int IsFullDequeue(Dequeue *d)		// if d is full, return 1, otherwise, 0
 			return 1;
 	}*/
 
-	if ((d->right+1) % (d->max_size + 1) == d->left)
+	if ((d->right+1) % (d->max_size) == d->left)
 		return 1;
 	
 	return 0;
