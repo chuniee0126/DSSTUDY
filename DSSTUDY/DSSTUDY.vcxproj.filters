@@ -18,5 +18,13 @@
     <ClCompile Include="DS_Solution.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="DequeueTest.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Dequeue.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

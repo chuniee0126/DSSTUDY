@@ -1,184 +1,125 @@
-#include "Dequeue.h"
-
+#include "Dequeue2.h"
 #include <stdio.h>
 #include <malloc.h>
 
-// The definition of the following functions should be in "Dequeue.c"
-Dequeue *CreateDequeue(int max_size)
-{
-	Dequeue * temp = (Dequeue*)malloc(sizeof(Dequeue));
-	temp->right = 0;
-	temp->left = 0;
-	temp->max_size = max_size;
-	temp->dequeue = (int*)malloc(sizeof(int)*(max_size));
 
-	return temp;
-}
-void DestroyDequeue(Dequeue *d)
-{
-	free(d->dequeue);
-	return;
-}
+Dequeue *CreateDequeue(int max_size) {
+	Node *temp = (Node*)malloc(sizeof(Node));
+	Dequeue *d = (Dequeue*)malloc(sizeof(Dequeue));
 
-// Dequeue operation
-void PushLeft(Dequeue *d, int item)
-{
-	if (IsFullDequeue(d)) {
-		printf("Dequeue is full!\n");
-		return;
-	}
+	temp->data = NULL;
+	temp->llink = NULL;
+	temp->rlink = NULL;
 
-	/*if (d->left > 0 && d->left <= (d->max_size - 1))
-		d->left--;
-	else if (d->left == 0)
-		d->left = d->max_size - 1;
-	else {
-		printf("Error!");
-		exit(0);
-	}*/
-
-	if (d->left != 0)
-		d->left = --d->left % (d->max_size);
-	else
-		d->left = d->max_size-1;
-
-	d->dequeue[d->left] = item;
-
-	return;
-
-
-}
-void PushRight(Dequeue *d, int item)
-{
-	if (IsFullDequeue(d)) {
-		printf("Dequeue is full!\n");
-		return;
-	}
-
-	d->dequeue[d->right] = item;
-
-	/*if (d->right >= 0 && d->right < (d->max_size - 1))
-		d->right++;
-	else if (d->right == (d->max_size - 1))
-		d->right = 0;
-	else {
-		printf("Error!");
-		exit(0);
-	}*/
-
-	d->right = ++d->right % (d->max_size);
-
-	return;
-
-}
-int PopLeft(Dequeue *d)
-{
-	int temp = 0;
-
-	if (IsEmptyDequeue(d)) {
-		printf("Dequeue is empty!\n");
-		return;
-	}
-
-	temp = d->dequeue[d->left];
-
-	/*if (d->left >= 0 && d->left < (d->max_size - 1))
-		d->left++;
-	else if (d->left == (d->max_size - 1))
-		d->left = 0;
-	else {
-		printf("Error!");
-		exit(0);
-	}*/
-
-	d->left = ++d->left % (d->max_size);
-
-	return temp;
-}
-int PopRight(Dequeue *d)
-{
-	if (IsEmptyDequeue(d)) {
-		printf("Dequeue is empty!\n");
-		return;
-	}
-
-	/*if (d->right > 0 && d->right <= (d->max_size - 1))
-		d->right--;
-	else if (d->right == 0)
-		d->right = (d->max_size - 1);
-	else {
-		printf("Error!");
-		exit(0);
-	}*/
-
-	if (d->right != 0)
-		d->right = --d->right % (d->max_size);
-	else
-		d->right = d->max_size-1;
-
-	return d->dequeue[d->right];
-}
-int IsFullDequeue(Dequeue *d)		// if d is full, return 1, otherwise, 0
-{
-	/*if (d->right != (d->max_size - 1)) {
-		if (d->right + 1 == d->left)
-			return 1;
-	}
-	else if (d->right == (d->max_size - 1)) {
-		if (d->left == 0)
-			return 1;
-	}*/
-
-	if ((d->right+1) % (d->max_size) == d->left)
-		return 1;
+	d->left = temp;
+	d->right = temp;
 	
-	return 0;
+	return d;
 }
-int IsEmptyDequeue(Dequeue *d)		// if d is empty, return 1, otherwise, 0
-{
-	/*if (d->right == d->left) {
-		return 1;
-	}*/
+void DestroyDequeue(Dequeue *d) {
+	Node * p = d->right;
+	Node * temp = NULL;
 
-	if (d->right == d->left)
-		return 1;
+	while (p != NULL)
+	{
+		temp = p->llink;
+		free(p);
+		p = temp;
+	}
 
-	return 0;
+	free(d);
+
+	return;
 }
-void DisplayDequeue(Dequeue *d)		// display current content of d, provided
-{
-	int i = 0;
 
+void PushLeft(Dequeue *d, int item) {
+	Node * p = d->left;
+	Node * nd = (Node*)malloc(sizeof(Node));
+
+	nd->data = item;
+	nd->rlink = p;
+	p->llink = nd;
+
+	d->left = nd;
+
+	return;
+}
+void PushRight(Dequeue *d, int item) {
+	Node * p = d->right;
+	Node * nd = (Node*)malloc(sizeof(Node));
+
+	nd->data = item;
+	nd->llink = p;
+	p->rlink = nd;
+
+	d->right = nd;
+
+	return;
+}
+int PopLeft(Dequeue *d){
+	Node * p = d->left;
+	int temp = p->data;
+	
 	if (IsEmptyDequeue(d)) {
-		printf("Dequeue is empty!\n");
+		printf("Dequeue is Empty! \n");
 		return;
 	}
 
-	printf("(left = %d, right = %d, max_size = %d)\n", d->left, d->right, d->max_size);
+	d->left = p->rlink;
+	free(p);
 
-	//print column numbers
-	for (i = 0; i < d->max_size; i++)
-		printf("%3d ", i);
-	printf("\n");
+	return temp;
+}
+int PopRight(Dequeue *d){
+	Node * p = d->right;
+	int temp = p->data;
 
-	// print contents
-	if (d->left <= d->right) {
-		for (i = 0; i < d->left; i++)
-			printf("    ");
-		for (; i < d->right; i++)
-			printf("%3d ", d->dequeue[i]);
-	}
-	else {
-		for (i = 0; i < d->right; i++)
-			printf("%3d ", d->dequeue[i]);
-		for (; i < d->left; i++)
-			printf("    ");
-		for (; i < d->max_size; i++)
-			printf("%3d ", d->dequeue[i]);
+	if (IsEmptyDequeue(d)) {
+		printf("Dequeue is Empty! \n");
+		return;
 	}
 
-	printf("\n");
+	d->left = p->llink;
+	free(p);
+
+	return temp;
+}
+int IsFullDequeue(Dequeue *d){
+
+}
+int IsEmptyDequeue(Dequeue *d){
+
+	if (d->right == NULL && d->left == NULL)
+		return 1;
+	else
+		return 0;
 }
 
+void DisplayDequeue(Dequeue *d){
+	Node * p = NULL;
+	int n = 0;
 
+	if (IsEmptyDequeue(d)) {
+		printf("Dequeue is Empty! \n");
+		return;
+	}
 
+	for (p = d->left; p != NULL; p = p->rlink, n++)
+		printf("%3d", p->data);
+
+	printf(" (%d items)\n", n);
+}
+void DisplayDequeueReverse(Dequeue *d){
+	Node * p = NULL;
+	int n = 0;
+
+	if (IsEmptyDequeue(d)) {
+		printf("Dequeue is Empty! \n");
+		return;
+	}
+
+	for (p = d->right; p != NULL; p = p->llink, n++)
+		printf("%3d", p->data);
+
+	printf(" (%d items)\n", n);
+}

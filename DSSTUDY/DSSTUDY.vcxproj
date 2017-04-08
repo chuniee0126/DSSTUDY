@@ -142,7 +142,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DequeueTest.c" />
     <ClCompile Include="DS_Solution.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Dequeue.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
