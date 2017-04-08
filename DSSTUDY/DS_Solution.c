@@ -36,23 +36,39 @@ void PushLeft(Dequeue *d, int item) {
 	Node * p = d->left;
 	Node * nd = (Node*)malloc(sizeof(Node));
 
-	nd->data = item;
-	nd->rlink = p;
-	p->llink = nd;
+	if (p->data == NULL) {
+		p->data = item;
+		free(nd);
+		return;
+	}
+	else {
+		nd->data = item;
+		nd->llink = NULL;
+		nd->rlink = p;
+		p->llink = nd;
 
-	d->left = nd;
-
+		d->left = nd;
+	}
+	
 	return;
 }
 void PushRight(Dequeue *d, int item) {
 	Node * p = d->right;
 	Node * nd = (Node*)malloc(sizeof(Node));
 
-	nd->data = item;
-	nd->llink = p;
-	p->rlink = nd;
+	if (p->data == NULL) {
+		p->data = item;
+		free(nd);
+		return;
+	}
+	else {
+		nd->data = item;
+		nd->llink = p;
+		nd->rlink = NULL;
+		p->rlink = nd;
 
-	d->right = nd;
+		d->right = nd;
+	}
 
 	return;
 }
@@ -67,6 +83,7 @@ int PopLeft(Dequeue *d){
 
 	d->left = p->rlink;
 	free(p);
+	d->left->llink = NULL;
 
 	return temp;
 }
@@ -79,8 +96,9 @@ int PopRight(Dequeue *d){
 		return;
 	}
 
-	d->left = p->llink;
+	d->right = p->llink;
 	free(p);
+	d->right->rlink = NULL;
 
 	return temp;
 }

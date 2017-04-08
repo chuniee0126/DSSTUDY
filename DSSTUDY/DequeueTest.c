@@ -43,6 +43,9 @@ int main(void) {
 	PushRight(d, 90);
 	DisplayDequeue(d);
 
+	printf("Reverse order: ");
+	DisplayDequeueReverse(d);
+
 	DestroyDequeue(d);
 
 	printf("Bye!\n");

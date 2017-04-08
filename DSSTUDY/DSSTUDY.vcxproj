@@ -146,7 +146,7 @@
     <ClCompile Include="DS_Solution.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Dequeue.h" />
+    <ClInclude Include="Dequeue2.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
