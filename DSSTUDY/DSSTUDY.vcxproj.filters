@@ -18,12 +18,12 @@
     <ClCompile Include="DS_Solution.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="BinTree.c">
+    <ClCompile Include="MinHeapTest.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BinTree.h">
+    <ClInclude Include="MinHeap.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

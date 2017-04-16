@@ -142,11 +142,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BinTree.c" />
+    <ClCompile Include="MinHeapTest.c" />
     <ClCompile Include="DS_Solution.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BinTree.h" />
+    <ClInclude Include="MinHeap.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

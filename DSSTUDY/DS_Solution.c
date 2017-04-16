@@ -1,72 +1,83 @@
-#include "BinTree.h"
+#include "MinHeap.h"
+
 #include <stdio.h>
 #include <malloc.h>
 
-TreeNode* MakeBT(TreeNode *left, char data, TreeNode *right) {
-	TreeNode *temp = (TreeNode *)malloc(sizeof(TreeNode));
+MinHeap* CreateMinHeap(int max_size) {
+	MinHeap * temp = (MinHeap*)malloc(sizeof(MinHeap));
 
-	temp->data = data;
-	temp->left = left;
-	temp->right = right;
+	temp->array = (int*)malloc(sizeof(int)*(max_size + 1));
+	temp->max_size = max_size;
+	temp->size = 0;
 
 	return temp;
 }
 
-void FreeBT(TreeNode *root, int level) {
+void FreeMinHeap(MinHeap *h) {
+	free(h);
+}
+
+int IsFullMinHeap(MinHeap *h) {
+	if (h->max_size == h->size)
+		return 1;
+	else
+		return 0;
+}
+
+int IsEmptyMinHeap(MinHeap *h) {
+	if (h->size == 0)
+		return 1;
+	else
+		return 0;
+}
+
+void InsertMinHeap(MinHeap *h, int data) {
+	int size = (h->size) + 1;
+
+	if (IsFullMinHeap(h)) {
+		printf("MinHeap is already Full!\n");
+		return;
+	}
+
+	while (size > 1) {
+		if (data < h->array[size / 2]) {
+			h->array[size] = h->array[size / 2];
+			size = size / 2;
+		}
+		/*else if (data == h->array[size / 2]) {
+			printf("this data is already in Heap!\n");
+			return;
+		}*/
+		else
+			break;
+	}
+
+	h->array[size] = data;
+	h->size++;
+
+	return;
+
+}
+
+int DeleteMinHeap(MinHeap *h) {
+
+	int root = 1;
+	int answer = h->array[root];
 	
-	if (root) {
-		FreeBT(root->left, level + 1);
-		FreeBT(root->right, level + 1);
-		PrintTab(level);
-		printf("Deleting %c, %d\n", root->data, level);
-		free(root);
+	while (root <= h->size) {
+		if (h->array[root * 2] < h->array[root * 2 + 1]) {
+			h->array[root] = h->array[root * 2];
+			root = root * 2;
+		}
+		else {
+			h->array[root] = h->array[root * 2 + 1];
+			root = root * 2 + 1;
+		}
 	}
-}
 
-void Inorder(TreeNode *root, int level) {
-	int i;
-	if (root) {
-		Inorder(root->left, level + 1);
-		PrintTab(level);
-		printf("inorder(%c, %d)\n", root->data, level);
-		Inorder(root->right, level + 1);
-	}
-	else {
-		PrintTab(level);
-		printf("inorder(NULL, %d)\n", level);
-	}
-}
+	h->array[root / 2] = h->array[h->size];
+	h->size--;
 
-void Preorder(TreeNode *root, int level) {
-	int i;
-	if (root) {
-		PrintTab(level);
-		printf("inorder(%c, %d)\n", root->data, level);
-		Preorder(root->left, level + 1);
-		Preorder(root->right, level + 1);
-	}
-	else {
-		PrintTab(level);
-		printf("inorder(NULL, %d)\n", level);
-	}
-}
+	return answer;
 
-void Postorder(TreeNode *root, int level) {
-	int i;
-	if (root) {
-		Postorder(root->left, level + 1);
-		Postorder(root->right, level + 1);
-		PrintTab(level);
-		printf("inorder(%c, %d)\n", root->data, level);
-	}
-	else {
-		PrintTab(level);
-		printf("inorder(NULL, %d)\n", level);
-	}
-}
-
-void PrintTab(int level) {
-	int i = 0;
-	for (i = 0; i < level; i++)
-		putchar('\t');
 }
