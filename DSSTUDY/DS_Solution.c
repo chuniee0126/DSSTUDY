@@ -1,143 +1,72 @@
-#include "Dequeue2.h"
+#include "BinTree.h"
 #include <stdio.h>
 #include <malloc.h>
 
+TreeNode* MakeBT(TreeNode *left, char data, TreeNode *right) {
+	TreeNode *temp = (TreeNode *)malloc(sizeof(TreeNode));
 
-Dequeue *CreateDequeue(int max_size) {
-	Node *temp = (Node*)malloc(sizeof(Node));
-	Dequeue *d = (Dequeue*)malloc(sizeof(Dequeue));
-
-	temp->data = NULL;
-	temp->llink = NULL;
-	temp->rlink = NULL;
-
-	d->left = temp;
-	d->right = temp;
-	
-	return d;
-}
-void DestroyDequeue(Dequeue *d) {
-	Node * p = d->right;
-	Node * temp = NULL;
-
-	while (p != NULL)
-	{
-		temp = p->llink;
-		free(p);
-		p = temp;
-	}
-
-	free(d);
-
-	return;
-}
-
-void PushLeft(Dequeue *d, int item) {
-	Node * p = d->left;
-	Node * nd = (Node*)malloc(sizeof(Node));
-
-	if (p->data == NULL) {
-		p->data = item;
-		free(nd);
-		return;
-	}
-	else {
-		nd->data = item;
-		nd->llink = NULL;
-		nd->rlink = p;
-		p->llink = nd;
-
-		d->left = nd;
-	}
-	
-	return;
-}
-void PushRight(Dequeue *d, int item) {
-	Node * p = d->right;
-	Node * nd = (Node*)malloc(sizeof(Node));
-
-	if (p->data == NULL) {
-		p->data = item;
-		free(nd);
-		return;
-	}
-	else {
-		nd->data = item;
-		nd->llink = p;
-		nd->rlink = NULL;
-		p->rlink = nd;
-
-		d->right = nd;
-	}
-
-	return;
-}
-int PopLeft(Dequeue *d){
-	Node * p = d->left;
-	int temp = p->data;
-	
-	if (IsEmptyDequeue(d)) {
-		printf("Dequeue is Empty! \n");
-		return;
-	}
-
-	d->left = p->rlink;
-	free(p);
-	d->left->llink = NULL;
+	temp->data = data;
+	temp->left = left;
+	temp->right = right;
 
 	return temp;
 }
-int PopRight(Dequeue *d){
-	Node * p = d->right;
-	int temp = p->data;
 
-	if (IsEmptyDequeue(d)) {
-		printf("Dequeue is Empty! \n");
-		return;
+void FreeBT(TreeNode *root, int level) {
+	
+	if (root) {
+		FreeBT(root->left, level + 1);
+		FreeBT(root->right, level + 1);
+		PrintTab(level);
+		printf("Deleting %c, %d\n", root->data, level);
+		free(root);
 	}
-
-	d->right = p->llink;
-	free(p);
-	d->right->rlink = NULL;
-
-	return temp;
-}
-int IsFullDequeue(Dequeue *d){
-
-}
-int IsEmptyDequeue(Dequeue *d){
-
-	if (d->right == NULL && d->left == NULL)
-		return 1;
-	else
-		return 0;
 }
 
-void DisplayDequeue(Dequeue *d){
-	Node * p = NULL;
-	int n = 0;
-
-	if (IsEmptyDequeue(d)) {
-		printf("Dequeue is Empty! \n");
-		return;
+void Inorder(TreeNode *root, int level) {
+	int i;
+	if (root) {
+		Inorder(root->left, level + 1);
+		PrintTab(level);
+		printf("inorder(%c, %d)\n", root->data, level);
+		Inorder(root->right, level + 1);
 	}
-
-	for (p = d->left; p != NULL; p = p->rlink, n++)
-		printf("%3d", p->data);
-
-	printf(" (%d items)\n", n);
-}
-void DisplayDequeueReverse(Dequeue *d){
-	Node * p = NULL;
-	int n = 0;
-
-	if (IsEmptyDequeue(d)) {
-		printf("Dequeue is Empty! \n");
-		return;
+	else {
+		PrintTab(level);
+		printf("inorder(NULL, %d)\n", level);
 	}
+}
 
-	for (p = d->right; p != NULL; p = p->llink, n++)
-		printf("%3d", p->data);
+void Preorder(TreeNode *root, int level) {
+	int i;
+	if (root) {
+		PrintTab(level);
+		printf("inorder(%c, %d)\n", root->data, level);
+		Preorder(root->left, level + 1);
+		Preorder(root->right, level + 1);
+	}
+	else {
+		PrintTab(level);
+		printf("inorder(NULL, %d)\n", level);
+	}
+}
 
-	printf(" (%d items)\n", n);
+void Postorder(TreeNode *root, int level) {
+	int i;
+	if (root) {
+		Postorder(root->left, level + 1);
+		Postorder(root->right, level + 1);
+		PrintTab(level);
+		printf("inorder(%c, %d)\n", root->data, level);
+	}
+	else {
+		PrintTab(level);
+		printf("inorder(NULL, %d)\n", level);
+	}
+}
+
+void PrintTab(int level) {
+	int i = 0;
+	for (i = 0; i < level; i++)
+		putchar('\t');
 }
